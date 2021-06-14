@@ -1,10 +1,12 @@
 package jm.task.core.jdbc;
 
+import jm.task.core.jdbc.dao.exceptions.DBServiceException;
+import jm.task.core.jdbc.dao.exceptions.UtilException;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.service.UserServiceImpl;
-import jm.task.core.jdbc.util.Util;
+import jm.task.core.jdbc.util.HibernateUtil;
+import jm.task.core.jdbc.util.JDBCUtil;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class Main {
@@ -24,19 +26,19 @@ public class Main {
             System.out.println("User с именем – Michelangelo добавлен в базу данных");
 
             List<User> allUsers = userService.getAllUsers();
-
             for (User user : allUsers) {
                 System.out.println(user);
             }
-
             userService.cleanUsersTable();
             userService.dropUsersTable();
 
-            Util.getConnection().close();
+
         } catch (Exception e) {
+            HibernateUtil.shutdown();
             e.printStackTrace();
         }
-
-
+        finally {
+            HibernateUtil.shutdown();
+        }
     }
 }

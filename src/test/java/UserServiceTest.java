@@ -1,3 +1,4 @@
+import jm.task.core.jdbc.dao.exceptions.DBServiceException;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.service.UserService;
 import jm.task.core.jdbc.service.UserServiceImpl;
@@ -12,6 +13,9 @@ public class UserServiceTest {
     private final String testName = "Ivan";
     private final String testLastName = "Ivanov";
     private final byte testAge = 5;
+
+    public UserServiceTest() throws DBServiceException {
+    }
 
 
     @Test

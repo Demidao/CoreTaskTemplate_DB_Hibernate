@@ -2,9 +2,7 @@ package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.dao.exceptions.*;
 import jm.task.core.jdbc.model.User;
-import jm.task.core.jdbc.util.Util;
-
-import java.sql.Connection;
+import jm.task.core.jdbc.util.JDBCUtil;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -17,9 +15,9 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void createUsersTable() throws DBServiceException {
-        try (Statement statement = Util.getConnection().createStatement()) {
+        try (Statement statement = JDBCUtil.getConnection().createStatement()) {
 
-            String sql = "CREATE TABLE users  " +
+            String sql = "CREATE TABLE IF NOT EXISTS users" +
                     "( id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY," +
                     "name VARCHAR (20) NOT NULL," +
                     "lastName VARCHAR (20) NOT NULL," +
@@ -35,7 +33,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void dropUsersTable() throws DBServiceException {
-        try (Statement statement = Util.getConnection().createStatement()) {
+        try (Statement statement = JDBCUtil.getConnection().createStatement()) {
 
             String sql = "DROP TABLE IF EXISTS users;";
 
@@ -48,7 +46,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void saveUser(String name, String lastName, byte age) throws DBServiceException {
-        try (Statement statement = Util.getConnection().createStatement()) {
+        try (Statement statement = JDBCUtil.getConnection().createStatement()) {
 
             String sql = String.format("INSERT INTO users (name, lastName, age) "
                     + " VALUES (\"%s\", \"%s\", \"%d\");", name, lastName, age);
@@ -63,7 +61,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void removeUserById(long id) throws DBServiceException {
-        try (Statement statement = Util.getConnection().createStatement()) {
+        try (Statement statement = JDBCUtil.getConnection().createStatement()) {
 
             String sql = String.format("DELETE FROM users" +
                     " WHERE id= %d;", id);
@@ -79,7 +77,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public List<User> getAllUsers() throws DBServiceException {
         List<User> out = new ArrayList<>();
-        try (Statement statement = Util.getConnection().createStatement()) {
+        try (Statement statement = JDBCUtil.getConnection().createStatement()) {
 
             String sql = "SELECT * FROM users";
             ResultSet rs = statement.executeQuery(sql);
